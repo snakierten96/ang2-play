@@ -1,0 +1,5 @@
+!/.gitignore
+.c9/**
+dist/**
+node_modules/**
+typings/**
