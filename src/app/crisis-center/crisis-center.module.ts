@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule }  from '@angular/forms';
 
 import { CrisisService } from './crisis.service';
+import { CrisisDetailResolve }    from './crisis-detail-resolve.service';
 
 import { CrisisCenterComponent }  from './crisis-center.component';
 import { CrisisListComponent }    from './crisis-list.component';
@@ -24,7 +25,8 @@ import { crisisCenterRouting } from './crisis-center.routing';
     CrisisAdminComponent
   ],
   providers: [
-    CrisisService
+    CrisisService,
+    CrisisDetailResolve
   ]
 })
 export class CrisisCenterModule {}

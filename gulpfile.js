@@ -31,11 +31,15 @@ gulp.task('clean:assets', function () {
 });
 
 gulp.task('copy:libs', ['clean:libs'], function () {
-  return gulp.src(config.libs,{ base: 'node_modules' }).pipe(gulp.dest(config.buildPath+'/lib'))
+  return gulp
+    .src(config.libs,{ base: 'node_modules' })
+    .pipe(gulp.dest(config.buildPath+'/lib'));
 });
 
 gulp.task('copy:assets', ['clean:assets'], function () {
-  return gulp.src(config.assets,{ base: './src' }).pipe(gulp.dest(config.buildPath));
+  return gulp
+    .src(config.assets,{ base: './src' })
+    .pipe(gulp.dest(config.buildPath));
 });
 
 gulp.task('ts-lint', function () {
