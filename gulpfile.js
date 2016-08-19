@@ -1,5 +1,4 @@
 var gulp  = require('gulp'),
-    //watch = require('gulp-watch'),
     del = require('del'),
     sourcemaps  = require('gulp-sourcemaps'),
     tsc = require('gulp-typescript'),
@@ -22,17 +21,12 @@ gulp.task('clean:libs', function () {
 });
 
 gulp.task('clean:assets', function () {
-  var mapAssets = config.assets.map((el) => { 
-    return el.replace(/\.\/src/, './dist').replace(/\.ts$/, '.js') 
+  var mapAssets = config.assets.map(el => { 
+    return el.replace(/\.\/src/, config.buildPath)
+      .replace(/\.ts$/, '.js')
+      .replace(/\*$/,'*.{html,htm,css}');
   });
-  mapAssets = [
-    './dist/index.html',
-    './dist/styles.css',
-    './dist/systemjs.config.js',
-    './dist/app/**/*.{html,htm,css}',
-    '!./dist/app/**/*.js'    
-  ];
-  console.log(mapAssets);
+
   return del(mapAssets);
 });
 
@@ -77,8 +71,7 @@ gulp.task('serve', ['clean:all', 'copy:libs', 'copy:assets', 'compile-ts'], func
 
 
   browserSync({
-    port: 8080,
-    //file: ['./dist/**/*.{html,htm,css,js}'],
+    port: +process.env.PORT || 8080,
     injectChanges: false,
     server: {
       baseDir: config.buildPath,
@@ -91,7 +84,7 @@ gulp.task('serve', ['clean:all', 'copy:libs', 'copy:assets', 'compile-ts'], func
       ]
     },
     ui: {
-      port: 8081
+      port: +process.env.PORT+1 || 8081
     }
   });
   
