@@ -2,9 +2,9 @@ import { Routes, RouterModule }  from '@angular/router';
 
 import { DashboardComponent }   from './dashboard/dashboard.component';
 import { loginRoutes,
-         authProviders }        from './login.routes';
+         authProviders }        from './login.routing';
          
-import { CanDeactivateGuard }   from './can-deactivate-guard.serice';
+import { CanDeactivateGuard }   from './can-deactivate-guard.service';
 
 const dashRoutes: Routes = [
   {
