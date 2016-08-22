@@ -6,7 +6,7 @@ var gulp  = require('gulp'),
     tsProject = tsc.createProject('tsconfig.json'),
     config = require('./gulp.config')();
 
-var browserSync = require('browser-sync'),
+var browserSync = require('browser-sync').create(),
     fallback = require('connect-history-api-fallback'),
     log = require('connect-logger');
 
@@ -16,8 +16,9 @@ gulp.task('clean:ts-target', function () {
   return del(config.buildPath + '/app/**/*.js');
 });
 
-gulp.task('clean:libs', function () {
-  return del(config.buildPath + '/lib/**/*');
+gulp.task('clean:libs', function (cb) {
+  del(config.buildPath + '/lib/**/*');
+  cb();
 });
 
 gulp.task('clean:assets', function () {
@@ -30,10 +31,11 @@ gulp.task('clean:assets', function () {
   return del(mapAssets);
 });
 
-gulp.task('copy:libs', ['clean:libs'], function () {
-  return gulp
+gulp.task('copy:libs', ['clean:libs'], function (cb) {
+  gulp
     .src(config.libs,{ base: 'node_modules' })
     .pipe(gulp.dest(config.buildPath+'/lib'));
+  cb();
 });
 
 gulp.task('copy:assets', ['clean:assets'], function () {
@@ -66,21 +68,25 @@ gulp.task('compile-ts', ['clean:ts-target'], function () {
     .pipe(gulp.dest(config.buildPath));
 });
 
-gulp.task('serve', ['clean:all', 'copy:libs', 'copy:assets', 'compile-ts'], function (cb) {
+gulp.task('reload', function() {
+  browserSync.reload();
+});
+
+gulp.task('serve', ['clean:all', 'copy:libs', 'copy:assets', 'compile-ts'], function () {
 
 
   // Watch ts source and assets for changes    
-  gulp.watch([config.allTS], ['compile-ts']);
-  gulp.watch(config.assets,['copy:assets']);
+  gulp.watch([config.allTS], ['compile-ts','reload']);
+  gulp.watch(config.assets,['copy:assets','reload']);
 
 
-  browserSync({
+  browserSync.init({
     port: +process.env.PORT || 8080,
     injectChanges: false,
     server: {
       baseDir: config.buildPath,
       middleware: [
-        log({ format: '%date %status %method %url'}),
+        log({ format: '%date %status %method %url' }),
         fallback({
             index: '/index.html',
             htmlAcceptHeaders: ['text/html', 'application/xhtml+xml']
@@ -93,7 +99,7 @@ gulp.task('serve', ['clean:all', 'copy:libs', 'copy:assets', 'compile-ts'], func
   });
   
   // Reload on build change
-  gulp.watch([config.buildPath + '/**/*.{html,htm,css,js}'],browserSync.reload, cb);
+  gulp.watch([config.buildPath + '/**/*.{html,htm,css,js}'],['reload']);
     
 });
 
