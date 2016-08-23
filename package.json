@@ -4,13 +4,15 @@
   "description": "Working with https://www.youtube.com/watch?v=7xOubdqyqaY",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "typings install",
+    "typings": "typings"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/snakierten96/ang2-play.git"
   },
-  "author": "",
+  "author": "snakierten96",
   "license": "MIT",
   "dependencies": {
     "@angular/common": "^2.0.0-rc.5",
